@@ -1,0 +1,1 @@
+/home/akselhj/Projects/dautid/rust_the_book/chapter13_functional_programming/closures/target/debug/closures-c76be59bb8995e57: /home/akselhj/Projects/dautid/rust_the_book/chapter13_functional_programming/closures/src/lib.rs

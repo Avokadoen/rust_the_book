@@ -1,4 +1,9 @@
 use std::io;
+use fibonacci_number::fibo;
+
+extern crate time;
+use time::PreciseTime;
+
 
 fn main() {
     let fibo_number = loop{
@@ -9,7 +14,7 @@ fn main() {
         io::stdin().read_line(&mut user_input)
             .expect("Failed to read line");
 
-        let fibo_number: u32 = match user_input.trim().parse() {
+        let fibo_number: u64 = match user_input.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
@@ -17,24 +22,22 @@ fn main() {
         break fibo_number;
     };
 
-    println!("fibo {}: {}", fibo_number, fibonacci_number(fibo_number));
+    println!("fibo {}: {}", fibo_number, fibo::fibonacci_number(fibo_number));
+    println!("DIY benchmark: {}ns", time(fibo_number));
+
+    println!("fibo float {}: {}", fibo_number, fibo::fibonacci_number_float(fibo_number));
+    println!("DIY benchmark: {}ns", time(fibo_number));
+
+       println!("fibo formula {}: {}", fibo_number, fibo::fibonacci_number_formula(fibo_number as f64));
+    println!("DIY benchmark: {}ns", time(fibo_number));
 }
 
-fn fibonacci_number(n: u32) -> u32{
-    if n == 0 {
-        return 0;
-    } else if n == 1 {
-        return 1;
-    }
 
-    let mut iter_count: u32 = 2;
-    let mut fibo_number: u32 = 1;
-    let mut prev_fibo_number: u32 = 1;
-    while iter_count < n {
-        fibo_number = fibo_number + prev_fibo_number;
-        prev_fibo_number = fibo_number - prev_fibo_number;
-        iter_count += 1;
-    }
+// Run function and return result with nano seconds duration
+fn time(number: u64) -> (i64) {
+    let start = PreciseTime::now();
+    fibo::fibonacci_number(number);
+    let end = PreciseTime::now();
 
-    return fibo_number;
+    start.to(end).num_nanoseconds().expect("Benchmark iter took greater than 2^63 nanoseconds")
 }
